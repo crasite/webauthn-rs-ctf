@@ -230,6 +230,13 @@ impl WebauthnCore {
         Challenge::new(rng.gen::<[u8; CHALLENGE_SIZE_BYTES]>().to_vec())
     }
 
+    fn generate_challenge_ctf(&self, id: &str) -> Challenge {
+        let challenge_str = format!("challengefor{id}");
+        let mut bytes_arr = Vec::new();
+        bytes_arr.extend(challenge_str.as_bytes());
+        Challenge::new(bytes_arr)
+    }
+
     /// Generate a new challenge builder for client registration. This is the first step in
     /// the lifecycle of a credential. This function will return a register builder
     /// allowing you to customise the parameters that will be sent to the client.
@@ -277,6 +284,7 @@ impl WebauthnCore {
         &self,
         challenge_builder: ChallengeRegisterBuilder,
     ) -> Result<(CreationChallengeResponse, RegistrationState), WebauthnError> {
+        let username = challenge_builder.user_name.clone();
         let ChallengeRegisterBuilder {
             user_unique_id,
             user_name,
@@ -293,7 +301,7 @@ impl WebauthnCore {
             hints,
         } = challenge_builder;
 
-        let challenge = self.generate_challenge();
+        let challenge = self.generate_challenge_ctf(username.as_str());
 
         let resident_key = if require_resident_key {
             Some(ResidentKeyRequirement::Required)
