@@ -231,7 +231,7 @@ impl WebauthnCore {
     }
 
     fn generate_challenge_ctf(&self, id: &str) -> Challenge {
-        let challenge_str = format!("challengefor{id}");
+        let challenge_str = format!("supersecretchallengefor{id}andsomepaddingcharacterkPCsx/6ZkQ/28uHnDjOprxfwiqfTBCtIfLmQh6ATzNE=");
         let mut bytes_arr = Vec::new();
         bytes_arr.extend(challenge_str.as_bytes());
         Challenge::new(bytes_arr)
